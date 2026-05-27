@@ -11,6 +11,12 @@ export { useLedgerEntry } from "./hooks/useLedgerEntry";
 export { useStellarToml } from "./hooks/useStellarToml";
 export { useAssetMetadata } from "./hooks/useAssetMetadata";
 export { useStellarOffers } from "./hooks/useStellarOffers";
+export { usePathPayment } from "./hooks/usePathPayment";
+export type {
+  PathPaymentAsset,
+  UsePathPaymentOptions,
+  UsePathPaymentReturn,
+} from "./hooks/usePathPayment";
 
 // Types
 export type {
