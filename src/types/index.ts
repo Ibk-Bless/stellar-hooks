@@ -86,6 +86,7 @@ export interface UseFreighterReturn extends FreighterState {
   disconnect: () => void;
   signTransaction: (xdr: string, opts?: SignTransactionOptions) => Promise<string>;
   signAuthEntry: (entryPreimageXdr: string) => Promise<string>;
+  signBlob: (blob: string, opts?: { accountToSign?: string }) => Promise<string>;
 }
 
 export interface SignTransactionOptions {

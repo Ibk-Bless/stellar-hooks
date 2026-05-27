@@ -49,7 +49,7 @@ export function App() {
 
 ### `useFreighter()`
 
-Connect to and interact with the [Freighter](https://freighter.app) browser extension wallet.
+Connect to and interact with the [Freighter](https://freighter.app) browser extension wallet, including arbitrary data signing via `signBlob`.
 
 ```ts
 const {
@@ -65,6 +65,7 @@ const {
   disconnect,        // () => void
   signTransaction,   // (xdr: string, opts?) => Promise<string>
   signAuthEntry,     // (entryPreimageXdr: string) => Promise<string>
+  signBlob,          // (blob: string, opts?) => Promise<string>
 } = useFreighter();
 ```
 

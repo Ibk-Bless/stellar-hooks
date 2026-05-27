@@ -6,6 +6,7 @@ import {
   requestAccess,
   signTransaction,
   signAuthEntry,
+  signBlob,
 } from "@stellar/freighter-api";
 import type { FreighterState, SignTransactionOptions, UseFreighterReturn } from "../types";
 
@@ -165,11 +166,21 @@ export function useFreighter(): UseFreighterReturn {
     return result.signedAuthEntry;
   }, []);
 
+  const signBlobCallback = useCallback(
+    async (blob: string, opts?: { accountToSign?: string }): Promise<string> => {
+      const result = await signBlob(blob, opts);
+      if (result.error) throw new Error(result.error);
+      return result.signedBlob;
+    },
+    []
+  );
+
   return {
     ...state,
     connect,
     disconnect,
     signTransaction: signTx,
     signAuthEntry: signEntry,
+    signBlob: signBlobCallback,
   };
 }
