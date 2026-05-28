@@ -14,7 +14,10 @@
     "lint": "eslint src --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish"
   },
   "keywords": [
     "stellar",
@@ -43,6 +46,8 @@
   },
   "devDependencies": {
     "@types/react": "^18.3.0",
+    "@changesets/cli": "^2.0.0",
+    "@changesets/changelog-github": "^0.7.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
     "eslint": "^8.57.0",
