@@ -34,6 +34,13 @@ export interface UseClaimableBalancesReturn extends ClaimableBalancesState {
   refetch: () => Promise<void>;
 }
 
+export interface UseClaimBalanceOptions {
+  /** Callback fired when the transaction is successfully confirmed. */
+  onSuccess?: (hash: string) => void;
+  /** Callback fired when the transaction fails or an error occurs. */
+  onError?: (error: Error) => void;
+}
+
 export interface UseClaimBalanceReturn {
   claim: (balanceId: string) => Promise<void>;
   status: TransactionStatus;
@@ -137,16 +144,23 @@ export function useClaimableBalances(
  *
  * @example
  * ```tsx
- * const { claim, status, hash, error } = useClaimBalance();
+ * const { claim, status, hash, error } = useClaimBalance({
+ *   onSuccess: (hash) => console.log("Claimed!", hash),
+ * });
  *
  * return <button onClick={() => claim(balance.id)}>Claim</button>;
  * ```
  */
-export function useClaimBalance(): UseClaimBalanceReturn {
+export function useClaimBalance(
+  options: UseClaimBalanceOptions = {}
+): UseClaimBalanceReturn {
+  const { onSuccess, onError } = options;
   const { config } = useStellarContext();
   const { signTransaction, publicKey } = useFreighter();
   const { submit: submitXdr, reset, ...txState } = useTransaction({
     mode: "classic",
+    onSuccess,
+    onError,
   });
 
   const claim = useCallback(

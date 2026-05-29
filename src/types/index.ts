@@ -119,7 +119,7 @@ export interface TransactionState<TResult = unknown> {
 
 // ─── Soroban Contract ─────────────────────────────────────────────────────────
 
-export interface ContractCallOptions {
+export interface ContractCallOptions<TResult = any> {
   /** Soroban contract address (C...) */
   contractId: string;
   method: string;
@@ -130,10 +130,14 @@ export interface ContractCallOptions {
   timeoutSeconds?: number;
   /** Custom Soroban RPC server instance. If not provided, one is created from the provider config. */
   sorobanRpcServer?: rpc.Server;
+  /** Callback fired when the transaction is successfully confirmed. */
+  onSuccess?: (result: TResult) => void;
+  /** Callback fired when the transaction fails or an error occurs. */
+  onError?: (error: Error) => void;
 }
 
 export interface UseContractCallReturn<TResult = unknown> extends TransactionState<TResult> {
-  call: (overrides?: Partial<ContractCallOptions>) => Promise<TResult | null>;
+  call: (overrides?: Partial<ContractCallOptions<TResult>>) => Promise<TResult | null>;
   reset: () => void;
 }
 

@@ -78,7 +78,7 @@ function createReducer<TResult>() {
  * ```
  */
 export function useSorobanContract<TResult = unknown>(
-  options: ContractCallOptions
+  options: ContractCallOptions<TResult>
 ): UseContractCallReturn<TResult> {
   const { config } = useStellarContext();
   const { publicKey, networkPassphrase, signTransaction } = useFreighter();
@@ -92,7 +92,7 @@ export function useSorobanContract<TResult = unknown>(
   });
 
   const call = useCallback(
-    async (overrides?: Partial<ContractCallOptions>): Promise<TResult | null> => {
+    async (overrides?: Partial<ContractCallOptions<TResult>>): Promise<TResult | null> => {
       const {
         contractId,
         method,
@@ -100,11 +100,14 @@ export function useSorobanContract<TResult = unknown>(
         fee = BASE_FEE,
         timeoutSeconds = 30,
         sorobanRpcServer,
+        onSuccess,
+        onError,
       } = { ...options, ...overrides };
 
       if (!publicKey) {
         const err = new Error("No wallet connected. Call useFreighter().connect() first.");
         dispatch({ type: "ERROR", payload: err });
+        onError?.(err);
         return null;
       }
 
@@ -194,6 +197,7 @@ export function useSorobanContract<TResult = unknown>(
             }
 
             dispatch({ type: "SUCCESS", payload: parsed, hash: txHash });
+            onSuccess?.(parsed);
             return parsed;
           }
 
@@ -206,6 +210,7 @@ export function useSorobanContract<TResult = unknown>(
       } catch (err) {
         const error = err instanceof Error ? err : new Error(String(err));
         dispatch({ type: "ERROR", payload: error });
+        onError?.(error);
         return null;
       }
     },
