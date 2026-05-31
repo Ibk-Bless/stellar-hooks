@@ -1,4 +1,4 @@
-import type { Horizon, SorobanRpc } from "@stellar/stellar-sdk";
+import type { Horizon, rpc } from "@stellar/stellar-sdk";
 
 // ─── Network ──────────────────────────────────────────────────────────────────
 
@@ -182,14 +182,14 @@ export interface UseContractCallReturn<TResult = unknown> extends TransactionSta
    * Returns the raw RPC simulation response including footprint, resource usage, and results.
    * Does not sign or submit a transaction.
    */
-  simulate: (overrides?: Partial<ContractCallOptions>) => Promise<SorobanRpc.Api.SimulateTransactionResponse>;
+  simulate: (overrides?: Partial<ContractCallOptions>) => Promise<rpc.Api.SimulateTransactionResponse>;
   reset: () => void;
 }
 
 // ─── Ledger Entry ─────────────────────────────────────────────────────────────
 
 export interface LedgerEntryState {
-  data: SorobanRpc.Api.LedgerEntryResult | null;
+  data: rpc.Api.LedgerEntryResult | null;
   isLoading: boolean;
   error: Error | null;
   refetch: () => Promise<void>;

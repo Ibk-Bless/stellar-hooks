@@ -1,5 +1,5 @@
 import useSWR, { type SWRConfiguration } from "swr";
-import { SorobanRpc, xdr } from "@stellar/stellar-sdk";
+import { rpc as SorobanRpc, xdr } from "@stellar/stellar-sdk";
 import { useStellarContext } from "stellar-hooks";
 
 export interface UseLedgerEntrySWROptions

@@ -1,5 +1,5 @@
 import useSWR, { type SWRConfiguration } from "swr";
-import { StellarTomlResolver } from "@stellar/stellar-sdk";
+import { StellarToml } from "@stellar/stellar-sdk";
 
 export interface StellarTomlData {
   CURRENCIES?: Array<Record<string, any>>;
@@ -26,7 +26,7 @@ export function useStellarToml(
   return useSWR<StellarTomlData>(
     domain ? ["stellar-toml", domain] : null,
     async () => {
-      const toml = await StellarTomlResolver.resolve(domain!);
+      const toml = await StellarToml.Resolver.resolve(domain!);
       return toml as StellarTomlData;
     },
     options

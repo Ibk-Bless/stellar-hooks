@@ -226,7 +226,7 @@ export function useSorobanContract<TResult = unknown>(
   );
 
   const simulate = useCallback(
-    async (overrides?: Partial<ContractCallOptions>): Promise<SorobanRpc.Api.SimulateTransactionResponse> => {
+    async (overrides?: Partial<ContractCallOptions>): Promise<rpc.Api.SimulateTransactionResponse> => {
       const {
         contractId,
         method,
@@ -241,7 +241,7 @@ export function useSorobanContract<TResult = unknown>(
       }
 
       try {
-        const server = sorobanRpcServer ?? new SorobanRpc.Server(config.sorobanRpcUrl);
+        const server = sorobanRpcServer ?? new rpc.Server(config.sorobanRpcUrl);
         const contract = new Contract(contractId);
 
         // Convert plain JS values to ScVals if needed
@@ -253,7 +253,7 @@ export function useSorobanContract<TResult = unknown>(
         const passphrase = networkPassphrase ?? config.networkPassphrase;
 
         const tx = new TransactionBuilder(account, {
-          fee,
+          fee: String(fee),
           networkPassphrase: passphrase,
         })
           .addOperation(contract.call(method, ...scArgs))
