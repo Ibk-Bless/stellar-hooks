@@ -266,8 +266,20 @@ The library ships with `@stellar/stellar-sdk` v13 and `@stellar/freighter-api` v
 3. `npm run dev` — builds in watch mode
 4. Edit hooks in `src/hooks/`, types in `src/types/`
 5. Open a PR
+6. Run `npm run changeset` to create a changeset note for your change.
+7. If your PR includes code changes, run `npm run build` before opening the PR.
 
 Please review our Contributing Guide and Code of Conduct for more details before opening a pull request.
+
+---
+
+## Release process
+
+This repository uses Changesets for automated changelog generation, version bumps, and npm publishing.
+
+- Use `npm run changeset` to add a release note to your PR.
+- After a changeset is merged into `main`, the GitHub Actions release workflow will publish the package automatically.
+- To enable automated publishing, add `NPM_TOKEN` to repository secrets.
 
 ---
 

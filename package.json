@@ -15,6 +15,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish"
     "size": "npm run build && size-limit"
   },
   "size-limit": [
@@ -62,6 +65,8 @@
     "@size-limit/preset-small-lib": "^12.1.0",
     "@types/node": "^25.9.1",
     "@types/react": "^18.3.0",
+    "@changesets/cli": "^2.0.0",
+    "@changesets/changelog-github": "^0.7.0",
     "@types/react-test-renderer": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
