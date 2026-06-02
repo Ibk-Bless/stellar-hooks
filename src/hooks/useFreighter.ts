@@ -207,17 +207,6 @@ export function useFreighter(): UseFreighterReturn {
         throw new Error("Freighter access denied or no account selected");
       }
       const networkDetails = await getNetworkDetails();
-      const address = await requestAccess();
-      if (!address) {
-        throw new Error("User rejected the connection request or no address returned");
-      }
-
-      const addressResult = await getAddress();
-      if (addressResult.error || !addressResult.address) {
-        throw new Error(addressResult.error ?? "Failed to get address");
-      }
-
-      const networkResult = await getNetwork();
       
       localStorage.setItem(STORAGE_KEY, "true");
       
@@ -242,18 +231,10 @@ export function useFreighter(): UseFreighterReturn {
 
   const signTx = useCallback(
     async (xdr: string, opts?: SignTransactionOptions): Promise<string> => {
-      // Freighter API v2 uses accountToSign; our public type exposes it as `address`
       return signTransaction(xdr, {
         networkPassphrase: opts?.networkPassphrase,
         accountToSign: opts?.address,
       });
-      const signOptions: { networkPassphrase?: string; address?: string } = {};
-      if (opts?.networkPassphrase) signOptions.networkPassphrase = opts.networkPassphrase;
-      if (opts?.address) signOptions.address = opts.address;
-
-      const result = await signTransaction(xdr, signOptions);
-      if (result.error) throw new Error(result.error);
-      return result.signedTxXdr;
     },
     [],
   );
@@ -267,27 +248,12 @@ export function useFreighter(): UseFreighterReturn {
 
   const signBlobCallback = useCallback(
     async (blob: string, opts?: { accountToSign?: string }): Promise<string> => {
-      return signBlob(blob, opts);
-  const signEntry = useCallback(async (entryPreimageXdr: string): Promise<string> => {
-    const result = await signAuthEntry(entryPreimageXdr);
-    if (result.error) throw new Error(result.error);
-    if (!result.signedAuthEntry) throw new Error("Failed to sign auth entry");
-    return result.signedAuthEntry;
-  }, []);
-
-  const signBlobCallback = useCallback(
-    async (blob: string, opts?: { accountToSign?: string }): Promise<string> => {
-      const signOptions: { address?: string } = {};
-      if (opts?.accountToSign) signOptions.address = opts.accountToSign;
-
-      const result = await signMessage(blob, signOptions);
-      if (result.error) throw new Error(result.error);
-
-      const signedMessage = result.signedMessage;
-       if (!signedMessage) throw new Error("Failed to sign blob");
-       if (typeof signedMessage === "string") return signedMessage;
-       if (Buffer.isBuffer(signedMessage)) return signedMessage.toString("base64");
-       throw new Error("Failed to sign blob");
+      const result = await signMessage(blob, {
+        accountToSign: opts?.accountToSign,
+      });
+      if (typeof result === "string") return result;
+      // Handle cases where the result might be an object containing the signed message
+      return (result as any).signedMessage || result;
     },
     [],
   );
