@@ -214,6 +214,37 @@ const { data, isLoading, error, refetch } = useLedgerEntry(key, {
 
 ---
 
+### `usePayment(options)`
+
+Build, sign, and submit a classic Stellar payment (native XLM or any Stellar asset) via Freighter in one hook.
+
+```ts
+const {
+  submit,    // () => Promise<void> — build, sign, and submit the payment
+  status,    // "idle" | "submitting" | "polling" | "success" | "error"
+  hash,      // string | null — transaction hash on success
+  isLoading, // boolean
+  isSuccess, // boolean
+  isError,   // boolean
+  error,     // Error | null
+  reset,     // () => void
+} = usePayment({
+  destination: "GBXXX...",
+  asset: { type: "native" },        // XLM
+  // asset: { type: "credit", code: "USDC", issuer: "G..." }, // any asset
+  amount: "10",
+  memo: "Thanks!",                  // optional, max 28 bytes
+  fee: 100,                         // optional, stroops (default: 100)
+  timeoutSeconds: 60,               // optional (default: 60)
+  onSuccess: (hash) => console.log("Sent!", hash),
+  onError:   (err)  => console.error(err),
+});
+
+return <button onClick={submit} disabled={isLoading}>Send XLM</button>;
+```
+
+---
+
 ## Provider
 
 Wrap your app with `<StellarProvider>` to configure the network.

@@ -19,6 +19,11 @@ export { useStellarToml } from "./hooks/useStellarToml";
 export { useAssetMetadata } from "./hooks/useAssetMetadata";
 export { useStellarOffers } from "./hooks/useStellarOffers";
 export { usePayment } from "./hooks/usePayment";
+export type {
+  PaymentAsset,
+  UsePaymentOptions,
+  UsePaymentReturn,
+} from "./hooks/usePayment";
 export { usePathPayment } from "./hooks/usePathPayment";
 export type {
   PathPaymentAsset,
