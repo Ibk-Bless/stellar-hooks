@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import {
   isConnected,
   getPublicKey,
@@ -92,7 +92,7 @@ const STORAGE_KEY = "stellar-hooks:freighter-connected";
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
 /**
- * Connect to and interact with the Freighter browser wallet.
+ * Hook for connecting to and interacting with the Freighter browser wallet.
  *
  * @returns {UseFreighterReturn}
  * @example
@@ -140,22 +140,23 @@ export function useFreighter(): UseFreighterReturn {
           dispatch({ type: "SET_NOT_INSTALLED" });
           return;
         }
-
-        const publicKey = await getPublicKey();
+        
+        const pkResult = await getPublicKey();
         if (cancelled) return;
+        
+        const publicKey = typeof pkResult === "string" ? pkResult : (pkResult as any)?.address;
 
         if (publicKey) {
-          const networkDetails = await getNetworkDetails();
+          const networkDetails = (await getNetworkDetails()) as any;
           if (cancelled) return;
 
           dispatch({
             type: "SET_CONNECTED",
             publicKey,
-            network: networkDetails.network,
-            networkPassphrase: networkDetails.networkPassphrase,
+            network: networkDetails.network || "",
+            networkPassphrase: networkDetails.networkPassphrase || "",
           });
         } else {
-          const wasConnected = localStorage.getItem(STORAGE_KEY) === "true";
           dispatch({ type: "SET_DISCONNECTED" });
         }
       } catch (err) {
@@ -202,19 +203,24 @@ export function useFreighter(): UseFreighterReturn {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       // requestAccess() returns the public key string on success
-      const publicKey = await requestAccess();
+      const result = await requestAccess();
+      const publicKey = typeof result === "string" ? result : (result as any)?.address;
+      const error = typeof result === "string" ? null : (result as any)?.error;
+
+      if (error) throw new Error(error);
       if (!publicKey) {
         throw new Error("Freighter access denied or no account selected");
       }
-      const networkDetails = await getNetworkDetails();
+      
+      const networkDetails = (await getNetworkDetails()) as any;
       
       localStorage.setItem(STORAGE_KEY, "true");
       
       dispatch({
         type: "SET_CONNECTED",
         publicKey,
-        network: networkDetails.network,
-        networkPassphrase: networkDetails.networkPassphrase,
+        network: networkDetails.network || "",
+        networkPassphrase: networkDetails.networkPassphrase || "",
       });
     } catch (err) {
       dispatch({
@@ -231,17 +237,23 @@ export function useFreighter(): UseFreighterReturn {
 
   const signTx = useCallback(
     async (xdr: string, opts?: SignTransactionOptions): Promise<string> => {
-      return signTransaction(xdr, {
+      const result = await signTransaction(xdr, {
         networkPassphrase: opts?.networkPassphrase,
         accountToSign: opts?.address,
       });
+      if (typeof result === "string") return result;
+      if ((result as any).error) throw new Error((result as any).error);
+      return (result as any).signedTxXdr;
     },
     [],
   );
 
   const signEntry = useCallback(
     async (entryPreimageXdr: string): Promise<string> => {
-      return signAuthEntry(entryPreimageXdr);
+      const result = await signAuthEntry(entryPreimageXdr);
+      if (typeof result === "string") return result;
+      if ((result as any).error) throw new Error((result as any).error);
+      return (result as any).signedAuthEntry;
     },
     [],
   );
@@ -252,8 +264,10 @@ export function useFreighter(): UseFreighterReturn {
         accountToSign: opts?.accountToSign,
       });
       if (typeof result === "string") return result;
+      if ((result as any).error) throw new Error((result as any).error);
+      
       // Handle cases where the result might be an object containing the signed message
-      return (result as any).signedMessage || result;
+      return (result as any).signedMessage || (result as any).signedBlob || result;
     },
     [],
   );
