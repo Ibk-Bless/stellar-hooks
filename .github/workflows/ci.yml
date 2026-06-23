@@ -17,5 +17,12 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
+      - name: Stale Issue Bot
+        uses: actions/stale@v9
+        with:
+          days-before-issue-stale: 60
+          days-before-issue-close: 0
+          stale-issue-label: stale
+          close-issue-message: "Closing this issue due to prolonged inactivity."
       - name: Check bundle size
         run: npm run size
