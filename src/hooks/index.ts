@@ -42,3 +42,6 @@ export type {
   SorobanTokenBalanceState,
   UseSorobanTokenBalanceOptions,
 } from "./useSorobanTokenBalance";
+
+export { useManageData } from "./useManageData";
+export type { UseManageDataOptions, UseManageDataReturn } from "./useManageData";
