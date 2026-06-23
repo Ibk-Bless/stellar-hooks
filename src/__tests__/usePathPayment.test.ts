@@ -25,6 +25,9 @@ const mockAddOperation = vi.fn().mockReturnThis();
 const mockSetTimeout = vi.fn().mockReturnThis();
 
 vi.mock("@stellar/stellar-sdk", () => ({
+  StrKey: {
+    isValidEd25519PublicKey: vi.fn().mockReturnValue(true),
+  },
   Asset: Object.assign(
     vi.fn().mockImplementation((code: string, issuer: string) => ({ type: "credit", code, issuer })),
     { native: vi.fn().mockReturnValue({ type: "native" }) }
