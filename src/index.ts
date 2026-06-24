@@ -37,6 +37,11 @@ export type {
   UsePathPaymentOptions,
   UsePathPaymentReturn,
 } from "./hooks/usePathPayment";
+export { useInflation } from "./hooks/useInflation";
+export type {
+  UseInflationOptions,
+  UseInflationReturn,
+} from "./hooks/useInflation";
 
 export { useAccountFlags } from "./hooks/useAccountFlags";
 export type {

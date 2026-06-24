@@ -44,6 +44,8 @@ export type {
   UseBumpSequenceReturn,
 } from "./useBumpSequence";
 export { usePathPayment } from "./usePathPayment";
+export { useInflation } from "./useInflation";
+export type { UseInflationOptions, UseInflationReturn } from "./useInflation";
 export { useTrade } from "./useTrade";
 export type {
   TradeAsset,
