@@ -1,8 +1,1 @@
-node_modules/
-dist/
-.env
-.env.local
-*.tsbuildinfo
-.DS_Store
-coverage/
-AGENTS.md
+﻿node_modules
