@@ -71,12 +71,12 @@
     "url": "https://github.com/spiffamani/stellar-hooks.git"
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
     "@stellar/freighter-api": "^6.0.1",
-    "@stellar/stellar-sdk": "^13.0.0"
+    "@stellar/stellar-sdk": "^13.0.0",
+    "stellar-hooks": "^0.1.0"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.7.0",
@@ -86,8 +86,6 @@
     "@semantic-release/github": "12.0.8",
     "@semantic-release/npm": "13.1.5",
     "@size-limit/preset-small-lib": "^12.1.0",
-    "@stellar/freighter-api": "^6.0.1",
-    "@stellar/stellar-sdk": "^13.0.0",
     "@tanstack/react-query": "^5.101.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^14.3.1",
