@@ -54,6 +54,13 @@ export type {
   UseTradeReturn,
 } from "./useTrade";
 
+export { useAccountFlags } from "./useAccountFlags";
+export type {
+  AccountFlag,
+  UseAccountFlagsOptions,
+  UseAccountFlagsReturn,
+} from "./useAccountFlags";
+
 export { useSorobanTokenBalance } from "./useSorobanTokenBalance";
 export type {
   SorobanTokenBalanceState,

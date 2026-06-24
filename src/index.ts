@@ -38,6 +38,12 @@ export type {
   UsePathPaymentReturn,
 } from "./hooks/usePathPayment";
 
+export { useAccountFlags } from "./hooks/useAccountFlags";
+export type {
+  AccountFlag,
+  UseAccountFlagsOptions,
+  UseAccountFlagsReturn,
+} from "./hooks/useAccountFlags";
 export { useTrade } from "./hooks/useTrade";
 export type {
   TradeAsset,
