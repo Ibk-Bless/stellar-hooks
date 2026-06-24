@@ -28,6 +28,15 @@ vi.mock("@stellar/stellar-sdk/rpc", () => ({
   Server: vi.fn().mockImplementation(() => ({
     getEvents: mockGetEvents,
   })),
+vi.mock("@stellar/stellar-sdk", () => ({
+  StrKey: {
+    isValidContract: vi.fn().mockReturnValue(true),
+  },
+  rpc: {
+    Server: vi.fn().mockImplementation(() => ({
+      getEvents: mockGetEvents,
+    })),
+  },
 }));
 
 // ─── Mock context ─────────────────────────────────────────────────────────────

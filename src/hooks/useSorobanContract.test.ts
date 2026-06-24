@@ -39,6 +39,24 @@ vi.mock("@stellar/stellar-sdk/rpc", async (importOriginal) => {
       ...actual.Api,
       isSimulationError: () => false,
       GetTransactionStatus: { SUCCESS: "SUCCESS", FAILED: "FAILED" },
+    StrKey: {
+      ...actual.StrKey,
+      isValidContract: vi.fn().mockReturnValue(true),
+    },
+    rpc: {
+      ...actual.rpc,
+      Server: vi.fn().mockImplementation(() => ({
+        simulateTransaction: mockSimulateTransaction,
+        sendTransaction: mockSendTransaction,
+        getTransaction: mockGetTransaction,
+        getAccount: mockGetAccount,
+      })),
+      Api: {
+        ...actual.rpc.Api,
+        isSimulationError: () => false,
+        GetTransactionStatus: { SUCCESS: "SUCCESS", FAILED: "FAILED" },
+      },
+      assembleTransaction: (tx: any) => ({ build: () => tx }),
     },
     assembleTransaction: (tx: any) => ({ build: () => tx }),
   };
