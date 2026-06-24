@@ -39,9 +39,21 @@ export type {
   UsePaymentReturn,
 } from "./usePayment";
 export { usePathPayment } from "./usePathPayment";
+export { useTrade } from "./useTrade";
+export type {
+  TradeAsset,
+  PlaceOfferParams,
+  ModifyOfferParams,
+  CancelOfferParams,
+  UseTradeOptions,
+  UseTradeReturn,
+} from "./useTrade";
 
 export { useSorobanTokenBalance } from "./useSorobanTokenBalance";
 export type {
   SorobanTokenBalanceState,
   UseSorobanTokenBalanceOptions,
 } from "./useSorobanTokenBalance";
+
+export { useOperations } from "./useOperations";
+export type { UseOperationsOptions, UseOperationsReturn } from "./useOperations";

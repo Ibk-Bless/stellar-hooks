@@ -33,7 +33,18 @@ export type {
   UsePathPaymentReturn,
 } from "./hooks/usePathPayment";
 
+export { useTrade } from "./hooks/useTrade";
+export type {
+  TradeAsset,
+  PlaceOfferParams,
+  ModifyOfferParams,
+  CancelOfferParams,
+  UseTradeOptions,
+  UseTradeReturn,
+} from "./hooks/useTrade";
+
 export { useSorobanTokenBalance } from "./hooks/useSorobanTokenBalance";
+export { useWalletConnect } from "./hooks/useWalletConnect";
 export type {
   SorobanTokenBalanceState,
   UseSorobanTokenBalanceOptions,
@@ -63,6 +74,11 @@ export type {
   // Provider
   StellarProviderProps,
   StellarContextValue,
+  // WalletConnect
+  WalletConnectChain,
+  WalletConnectOptions,
+  WalletConnectState,
+  UseWalletConnectReturn,
 } from "./types";
 
 // Hook-specific Types
@@ -70,6 +86,8 @@ export type { StellarTomlData, UseStellarTomlReturn } from "./hooks/useStellarTo
 export type { AssetMetadata, UseAssetMetadataReturn } from "./hooks/useAssetMetadata";
 export type { UseStellarOffersOptions, UseStellarOffersReturn } from "./hooks/useStellarOffers";
 export type { UseEffectsOptions, UseEffectsReturn } from "./hooks/useEffects";
+export { useOperations } from "./hooks/useOperations";
+export type { UseOperationsOptions, UseOperationsReturn } from "./hooks/useOperations";
 
 // Network presets (useful for custom configs)
 export { NETWORK_CONFIGS } from "./types";
