@@ -66,12 +66,25 @@ export type {
 } from "./hooks/useAccountMerge";
 
 export { useSorobanTokenBalance } from "./hooks/useSorobanTokenBalance";
+export { useWalletsKit } from "./hooks/useWalletsKit";
 export { useWalletConnect } from "./hooks/useWalletConnect";
 export type {
   SorobanTokenBalanceState,
   UseSorobanTokenBalanceOptions,
 } from "./hooks/useSorobanTokenBalance";
 
+export { useMultiSig } from "./hooks/useMultiSig";
+export type {
+  BuildOptions,
+  UseMultiSigOptions,
+  UseMultiSigReturn,
+} from "./hooks/useMultiSig";
+
+export { useTrustline } from "./hooks/useTrustline";
+export type {
+  UseTrustlineOptions,
+  UseTrustlineReturn,
+} from "./hooks/useTrustline";
 export { useCreateAccount } from "./hooks/useCreateAccount";
 export type { UseCreateAccountOptions, UseCreateAccountReturn } from "./hooks/useCreateAccount";
 
@@ -89,6 +102,7 @@ export type {
   StellarBalance,
   // Wallet
   FreighterState,
+  UseFreighterOptions,
   UseFreighterReturn,
   SignTransactionOptions,
   // Transactions
@@ -102,6 +116,10 @@ export type {
   // Provider
   StellarProviderProps,
   StellarContextValue,
+  // Wallets Kit
+  WalletsKitOptions,
+  WalletsKitState,
+  UseWalletsKitReturn,
   // WalletConnect
   WalletConnectChain,
   WalletConnectOptions,

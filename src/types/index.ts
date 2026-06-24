@@ -5,8 +5,7 @@
  * @license MIT
  */
 
-import type { Horizon, rpc, xdr } from "@stellar/stellar-sdk";
-import type { Horizon } from "@stellar/stellar-sdk";
+import type { Horizon, xdr } from "@stellar/stellar-sdk";
 import type * as rpc from "@stellar/stellar-sdk/rpc";
 
 // ─── Network ──────────────────────────────────────────────────────────────────
@@ -23,28 +22,41 @@ export interface NetworkConfig {
   networkPassphrase: string;
 }
 
-export {
-  // Branded types
+import {
   type StellarPublicKey,
   type StellarContractId,
   type StellarXdrString,
   type StellarTxHash,
   type StellarAssetIssuer,
-  
-  // Factory functions
   asPublicKey,
   asContractId,
   asXdrString,
   asTxHash,
   asAssetIssuer,
-  
-  // Unsafe casts
   unsafeAsPublicKey,
   unsafeAsContractId,
   unsafeAsXdrString,
   unsafeAsTxHash,
   unsafeAsAssetIssuer,
 } from "./branded";
+
+export {
+  type StellarPublicKey,
+  type StellarContractId,
+  type StellarXdrString,
+  type StellarTxHash,
+  type StellarAssetIssuer,
+  asPublicKey,
+  asContractId,
+  asXdrString,
+  asTxHash,
+  asAssetIssuer,
+  unsafeAsPublicKey,
+  unsafeAsContractId,
+  unsafeAsXdrString,
+  unsafeAsTxHash,
+  unsafeAsAssetIssuer,
+};
 
 /**
  * Endpoint configuration for a private or self-hosted Stellar network.
@@ -152,8 +164,20 @@ export interface FreighterState {
   publicKey: StellarPublicKey | null;
   network: string | null;
   networkPassphrase: string | null;
+  /** True when Freighter's network passphrase differs from the app's expected network. */
+  networkPassphraseMismatch: boolean;
+  /** Actionable warning when {@link networkPassphraseMismatch} is true; otherwise null. */
+  networkPassphraseWarning: string | null;
   isLoading: boolean;
   error: Error | null;
+}
+
+export interface UseFreighterOptions {
+  /**
+   * Expected Stellar network passphrase for this dApp.
+   * Defaults to the {@link StellarProvider} config when the hook runs inside the provider.
+   */
+  expectedNetworkPassphrase?: string;
 }
 
 export interface UseFreighterReturn extends FreighterState {
@@ -194,7 +218,7 @@ export interface TransactionState<TResult = unknown> {
 
 // ─── Soroban Contract ─────────────────────────────────────────────────────────
 
-export interface ContractCallOptions<TResult = any> {
+export interface ContractCallOptions<TResult = unknown> {
   /** Soroban contract address (C...) */
   contractId: StellarContractId;
   method: string;
@@ -270,6 +294,50 @@ export interface StellarContextValue {
   network: StellarNetwork;
 }
 
+// ─── Stellar Wallets Kit ──────────────────────────────────────────────────────
+
+/** Init params forwarded to StellarWalletsKit.init(). */
+export interface WalletsKitOptions {
+  /** List of wallet modules to support. Pass `defaultModules()` for all built-in wallets. */
+  modules: unknown[];
+  /** Pre-select a wallet by its ID (e.g. "freighter"). */
+  selectedWalletId?: string;
+  /** Stellar network passphrase. Defaults to the StellarProvider network. */
+  network?: string;
+}
+
+export interface WalletsKitState {
+  /** Active wallet public key, null when not connected. */
+  publicKey: string | null;
+  /** Whether an address is currently connected. */
+  isConnected: boolean;
+  /** True while the connect (authModal) call is in-flight. */
+  isConnecting: boolean;
+  error: Error | null;
+}
+
+export interface UseWalletsKitReturn extends WalletsKitState {
+  /**
+   * Open the Stellar Wallets Kit auth modal so the user can pick a wallet.
+   * Resolves with the connected address on success.
+   */
+  connect: () => Promise<string | null>;
+  /** Clear the active address (does not call any wallet SDK disconnect). */
+  disconnect: () => void;
+  /** Sign a transaction XDR with the active wallet. */
+  signTransaction: (
+    xdr: string,
+    opts?: { networkPassphrase?: string; address?: string }
+  ) => Promise<string>;
+  /** Sign a Soroban auth entry with the active wallet. */
+  signAuthEntry: (
+    authEntry: string,
+    opts?: { networkPassphrase?: string; address?: string }
+  ) => Promise<string>;
+  /** Sign a message/blob with the active wallet. */
+  signMessage: (
+    message: string,
+    opts?: { networkPassphrase?: string; address?: string }
 // ─── WalletConnect v2 ─────────────────────────────────────────────────────────
 
 /** Stellar CAIP-2 chain IDs for WalletConnect namespaces. */

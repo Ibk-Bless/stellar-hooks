@@ -16,7 +16,8 @@ vi.mock("react", async () => {
     useCallback: (fn: unknown) => fn,
     useReducer: vi.fn(),
     useEffect: vi.fn(),
-    useRef: vi.fn().mockReturnValue({ current: null }),
+    useRef: vi.fn().mockReturnValue({ current: true }),
+    useRef: vi.fn((val) => ({ current: val })),
   };
 });
 
@@ -28,6 +29,8 @@ vi.mock("@stellar/stellar-sdk/rpc", () => ({
   Server: vi.fn().mockImplementation(() => ({
     getEvents: mockGetEvents,
   })),
+}));
+
 vi.mock("@stellar/stellar-sdk", () => ({
   StrKey: {
     isValidContract: vi.fn().mockReturnValue(true),
