@@ -74,30 +74,6 @@ export function useContractEvents(options: UseContractEventsOptions) {
 
       const response = await server.getEvents({
         ...(options.startLedger !== undefined && { startLedger: options.startLedger }),
-        filters: [filter],
-        pagination: {
-          cursor: cursorRef.current,
-          limit: options.limit || 100,
-        },
-        ...(options.topics !== undefined ? { topics: options.topics } : {}),
-      };
-
-      const response = await server.getEvents({
-        ...(options.startLedger !== undefined ? { startLedger: options.startLedger } : {}),
-        filters: [filter],
-        ...(cursorRef.current !== undefined ? { cursor: cursorRef.current } : {}),
-        limit: options.limit || 100,
-      });
-
-      if (isMounted.current && response.events) {
-        const lastEvent = response.events[response.events.length - 1];
-        if (lastEvent) {
-          cursorRef.current = lastEvent.pagingToken;
-        ...(options.topics !== undefined && { topics: options.topics }),
-      };
-
-      const response = await server.getEvents({
-        ...(options.startLedger !== undefined && { startLedger: options.startLedger }),
         ...(cursorRef.current !== undefined && { cursor: cursorRef.current }),
         filters: [filter],
         limit: options.limit ?? 100,
