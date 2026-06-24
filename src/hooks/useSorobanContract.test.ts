@@ -26,10 +26,24 @@ const mockSendTransaction = vi.fn();
 const mockGetTransaction = vi.fn();
 const mockGetAccount = vi.fn().mockResolvedValue({ sequenceNumber: () => "1" });
 
-vi.mock("@stellar/stellar-sdk", async (importOriginal) => {
+vi.mock("@stellar/stellar-sdk/rpc", async (importOriginal) => {
   const actual = await importOriginal() as any;
   return {
     ...actual,
+    Server: vi.fn().mockImplementation(() => ({
+      simulateTransaction: mockSimulateTransaction,
+      sendTransaction: mockSendTransaction,
+      getTransaction: mockGetTransaction,
+      getAccount: mockGetAccount,
+    })),
+    Api: {
+      ...actual.Api,
+      isSimulationError: () => false,
+      GetTransactionStatus: { SUCCESS: "SUCCESS", FAILED: "FAILED" },
+    StrKey: {
+      ...actual.StrKey,
+      isValidContract: vi.fn().mockReturnValue(true),
+    },
     rpc: {
       ...actual.rpc,
       Server: vi.fn().mockImplementation(() => ({
@@ -45,6 +59,14 @@ vi.mock("@stellar/stellar-sdk", async (importOriginal) => {
       },
       assembleTransaction: (tx: any) => ({ build: () => tx }),
     },
+    assembleTransaction: (tx: any) => ({ build: () => tx }),
+  };
+});
+
+vi.mock("@stellar/stellar-sdk", async (importOriginal) => {
+  const actual = await importOriginal() as any;
+  return {
+    ...actual,
     Contract: vi.fn().mockImplementation(() => ({
       call: vi.fn().mockReturnValue({}),
     })),
